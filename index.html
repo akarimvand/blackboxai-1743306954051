@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاسبه حقوق</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* تم ثابت و مدرن */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            direction: rtl;
+            text-align: right;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .panel {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .panel h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            flex: 1;
+            margin: 0 10px 0 0;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            flex: 2;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .btn-ios {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-ios:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .toggle-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-button label {
+            margin: 0;
+        }
+
+        /* فیلد پرداختی بزرگتر و بولد */
+        #mDaryafti {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        /* دکمه منطقه ویژه */
+        #mantagheToggle {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        #mantagheToggle.region-special {
+            background-color: #007bff;
+        }
+
+        /* بهینه‌سازی موبایل */
+        @media (max-width: 768px) {
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .form-group label {
+                margin-bottom: 5px;
+            }
+
+            .form-group input,
+            .form-group select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <!-- پنل ورودی کاربر -->
+            <div class="col-md-6">
+                <div class="panel">
+                    <h2>ورودی کاربر</h2>
+                    <form id="salaryForm">
+                        <!-- Month Name -->
+                        <div class="form-group">
+                            <label for="monthName">ماه:</label>
+                            <select id="monthName" class="form-control"></select>
+                        </div>
+                        <!-- Month Days -->
+                        <div class="form-group">
+                            <label for="monthDays">تعداد روزهای ماه:</label>
+                            <input type="text" id="monthDays" class="form-control" readonly>
+                        </div>
+                        <!-- Hozor (Presence) -->
+                        <div class="form-group">
+                            <label for="hozor">حضور:</label>
+                            <select id="hozor" class="form-control"></select>
+                        </div>
+                        <!-- Morakhasi (Vacation) -->
+                        <div class="form-group">
+                            <label for="morakhasi">مرخصی:</label>
+                            <select id="morakhasi" class="form-control"></select>
+                        </div>
+                        <!-- T_Farzand (Number of Children) -->
+                        <div class="form-group">
+                            <label for="tFarzand">تعداد فرزند:</label>
+                            <select id="tFarzand" class="form-control"></select>
+                        </div>
+                        <!-- D_Roz (Daily Salary) -->
+                        <div class="form-group">
+                            <label for="dastmozRozaneh">دستمزد روزانه (ریال):</label>
+                            <input type="number" id="dastmozRozaneh" class="form-control">
+                        </div>
+                        <!-- Zarib (Coefficient) -->
+                        <div class="form-group">
+                            <label for="zarib">ضریب:</label>
+                            <input type="number" id="zarib" class="form-control" value="1.675">
+                        </div>
+                        <!-- Ayab (Coming and Going) -->
+                        <div class="form-group">
+                            <label for="ayab">عیب (آیاب و ذهاب):</label>
+                            <input type="number" id="ayab" class="form-control" value="0">
+                        </div>
+                        <!-- Zarib Ezafe -->
+                        <div class="form-group">
+                            <label for="zaribEzafe">ضریب اضافه:</label>
+                            <input type="number" id="zaribEzafe" class="form-control" value="0">
+                        </div>
+                        <!-- E Kargahi -->
+                        <div class="form-group">
+                            <label for="eKargahi">اضافه کاری کارگاهی:</label>
+                            <input type="number" id="eKargahi" class="form-control" value="0">
+                        </div>
+                        <!-- E Saati -->
+                        <div class="form-group">
+                            <label for="eSaati">اضافه کاری ساعتی:</label>
+                            <input type="number" id="eSaati" class="form-control" value="50">
+                        </div>
+                        <!-- Haghtahol -->
+                        <div class="form-group">
+                            <label for="haghtahol">حق تاهل:</label>
+                            <div class="toggle-button">
+                                <input type="number" id="haghtahol" class="form-control" value="5000000" readonly>
+                                <button type="button" class="btn-ios" onclick="toggleHaghtahol()">تغییر حق تاهل</button>
+                            </div>
+                        </div>
+                        <!-- Mantaghe (منطقه ویژه) -->
+                        <div class="form-group">
+                            <label for="mantaghe">منطقه:</label>
+                            <div class="toggle-button">
+                                <button type="button" id="mantagheToggle" class="btn-secondary" onclick="toggleMantaghe()">منطقه عادی</button>
+                            </div>
+                        </div>
+                        <!-- مساعده -->
+                        <div class="form-group">
+                            <label for="mMosaede">مساعده:</label>
+                            <input type="number" id="mMosaede" class="form-control" value="0">
+                        </div>
+                        <!-- پاداش -->
+                        <div class="form-group">
+                            <label for="padash">پاداش:</label>
+                            <input type="number" id="padash" class="form-control" value="0">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- پنل نتایج محاسباتی -->
+            <div class="col-md-6">
+                <div class="panel">
+                    <h2>نتایج محاسبات</h2>
+                    <div class="form-group">
+                        <label for="mDasMah">حقوق پایه:</label>
+                        <input type="text" id="mDasMah" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="mHaghOlad">حق اولاد:</label>
+                        <input type="text" id="mHaghOlad" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="hMaskan">حق مسکن:</label>
+                        <input type="text" id="hMaskan" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="hBon">حق بن:</label>
+                        <input type="text" id="hBon" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="mEzafe">اضافه کاری:</label>
+                        <input type="text" id="mEzafe" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="hBimeh">بیمه:</label>
+                        <input type="text" id="hBimeh" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="mMalyat">مالیات:</label>
+                        <input type="text" id="mMalyat" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="mDaryafti">حقوق خالص:</label>
+                        <input type="text" id="mDaryafti" class="form-control" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- دکمه‌ها -->
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn-ios" onclick="mohasebe()">محاسبه</button>
+                <button type="button" class="btn-secondary" onclick="printForm()">چاپ</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
